@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,8 +13,8 @@ app.use(bodyParser.json());
 const smtpTransport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'samdhanaseelan12@gmail.com',
-    pass: 'ysbbmetdkbciduyo',
+    user: process.env.MAIL,
+    pass: process.env.PASS_KEY,
   },
 });
 
@@ -24,7 +25,7 @@ app.post('/api/send-email', (req, res) => {
     to,
     subject,
     text,
-    from: 'your-email@gmail.com',
+    from: process.env.MAIL, // Use the same email address as the sender
   };
 
   smtpTransport.sendMail(mailOptions, (error, response) => {
